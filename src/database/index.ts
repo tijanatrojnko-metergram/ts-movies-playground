@@ -12,12 +12,12 @@ class Database {
 
   private connectToDB(): void {
     createConnection({
-      type: envString("mysql", "sqlite"),
+      type: envString("postgres", "postgres"),
       host: envString(process.env.DATABASE_HOST!, ""),
       port: envString(Number(process.env.DATABASE_PORT!), 0),
       username: envString(process.env.DATABASE_USERNAME!, ""),
       password: envString(process.env.DATABASE_PASSWORD!, ""),
-      database: envString(process.env.DATABASE_NAME!, "./db.sqlite"),
+      database: envString(process.env.DATABASE_NAME!, "moviedb"),
       entities: [
         __dirname + "/entity/*.ts",
         __dirname + "/entity/*.js"

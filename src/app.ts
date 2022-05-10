@@ -31,11 +31,14 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'productio
 /************************************************************************************
  *                               Register all routes
  ***********************************************************************************/
+//  import {MovieController} from "src/app/movie-app/movie.router"
+// import { getMovie } from './app/movie-app/movie.service';
 
 RegisterRoutes(app);
 
-app.use("/docs", swaggerUi.serve, async (req: express.Request, res: express.Response) => {
+app.use("/", swaggerUi.serve, async (req: express.Request, res: express.Response) => {
   return res.send(swaggerUi.generateHTML(await import("../tsoa/swagger.json")));
+
 });
 
 /************************************************************************************
