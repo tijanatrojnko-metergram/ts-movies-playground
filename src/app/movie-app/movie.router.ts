@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
-import { IMovie, createMovie, getMovie, updateMovie, deleteMovie } from './movie.service';
+import { IMovie, createMovie, updateMovie, deleteMovie, getAllMovies, getSpecificMovie} from './movie.service';
 
 @Tags('Movie')
 @Route('/')
@@ -12,13 +12,13 @@ export class MovieController extends Controller {
   }
 
   @Get('/read')
-  public async getMovie() {
-    return getMovie()
+  public async getAllMovies() {
+    return getAllMovies()
   }
 
   @Get('/read/{movieId}')
   public async readMovieWithId(@Path('movieId') movieId: string) {
-    return getMovie(movieId)
+    return getSpecificMovie(movieId)
   }
 
   @Put('/update')
@@ -31,5 +31,6 @@ export class MovieController extends Controller {
     return deleteMovie(movieId)
   }
 
-
 }
+
+

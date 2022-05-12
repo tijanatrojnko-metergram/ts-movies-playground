@@ -19,48 +19,61 @@ export const createMovie = async (movie: IMovie) => {
       _newMovie['rating'] = movie['rating'];
       _newMovie['votes'] = movie['votes'];
 
-      return await _newMovie.save();
+      return _newMovie.save(); //bez await
     } catch (e) {
-      console.error(e);
+      throw new Error('Unsuccessful creation of a movie.')
+
     }
 }
 
-export const getMovie = async (movieId?: string) => {
-    try {
-      if (movieId) {   // get specific movie
-        return await Movie.findOne({
-          where: { id: movieId },
-        });
-      } else {        // get all movies
-        return await Movie.find();
-      }
-    } catch (e) {
-      console.error(e);
+export const getAllMovies = async () => {
+  try {
+      return Movie.find();
     }
+  catch (e) {
+    throw new Error('No movies found.')
+  }
 }
+
+export const getSpecificMovie = async (movieId: string) => {
+  try {
+    const foundMovie = await Movie.findOne({ where: { id: movieId } });
+    if (!foundMovie) {   // get specific movie
+      return { error: "Movie is not found!" }
+    }
+    return foundMovie;
+  }
+  catch (e) {
+    throw new Error(`Movie with id: ${movieId} not found`);
+  }
+}
+
+  
 
 export const updateMovie = async (movie: { id: string } & IMovie) => {
     try {
       const _foundMovie = await Movie.findOne({ where: { id: movie['id'] } });
-      if (!_foundMovie) return { message: "Movie is not found!" };
+      if (!_foundMovie)  
+        throw new Error(`Movie with id: ${movie.id} not found`)
       if (movie['title']) _foundMovie['title'] = movie['title'];
       if (movie['year']) _foundMovie['year'] = movie['year'];
       if (movie['runtime']) _foundMovie['runtime'] = movie['runtime'];
       if (movie['rating']) _foundMovie['rating'] = movie['rating'];
       if (movie['votes']) _foundMovie['votes'] = movie['votes'];
 
-      return await _foundMovie.save();
+      return _foundMovie.save(); // update 
     } catch (e) {
-      console.error(e);
+      throw new Error('Unsuccessful update.')
     }
   }
 
 export const deleteMovie = async (movieId: string) => {
     try {
       const _foundMovie = await Movie.findOne({ where: { id: movieId } });
-      if (!_foundMovie) return { message: "Movie is not found!" };
-      return await _foundMovie.remove();
+      if (!_foundMovie) 
+        throw new Error(`Movie with id: ${movieId} not found`)
+      return _foundMovie.remove();
     } catch (e) {
-      console.error(e);
+      throw new Error('Unsuccessful delete.')
     }
   }
