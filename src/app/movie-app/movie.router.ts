@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
+import { filterByGenre,filterByActor,filterMovies,totalLength,movieLanguages,movieUrls,movieVotes } from './movie-manipulation';
 import { IMovie, createMovie, updateMovie, deleteMovie, getAllMovies, getSpecificMovie} from './movie.service';
 
 @Tags('Movie')
@@ -31,6 +32,18 @@ export class MovieController extends Controller {
     return deleteMovie(movieId)
   }
 
+  @Get('/read/{genre}')
+  public async filterByGenre() {
+    return filterByGenre(`{genre}`)
+  }
+
+  @Get('/read/{actor}')
+  public async filterByActor() {
+    return filterByActor(`{actor}`)
+  }
+
 }
+
+
 
 

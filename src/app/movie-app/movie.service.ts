@@ -1,4 +1,6 @@
 import { Movie } from '@entity/movie';
+import {valSchema} from '../helpers/validation_schema'
+
 export interface IMovie {
     id: string,
     title: string,
@@ -12,6 +14,7 @@ export interface IMovie {
 export const createMovie = async (movie: IMovie) => {
     try {
       const _newMovie = new Movie();
+      const { error } = valSchema.validate(_newMovie);
       _newMovie['id'] = movie['id'];
       _newMovie['title'] = movie['title'];
       _newMovie['year'] = movie['year'];
@@ -53,6 +56,7 @@ export const getSpecificMovie = async (movieId: string) => {
 export const updateMovie = async (movie: { id: string } & IMovie) => {
     try {
       const _foundMovie = await Movie.findOne({ where: { id: movie['id'] } });
+      const { error } = valSchema.validate(_foundMovie);
       if (!_foundMovie)  
         throw new Error(`Movie with id: ${movie.id} not found`)
       if (movie['title']) _foundMovie['title'] = movie['title'];
@@ -77,3 +81,5 @@ export const deleteMovie = async (movieId: string) => {
       throw new Error('Unsuccessful delete.')
     }
   }
+
+  
