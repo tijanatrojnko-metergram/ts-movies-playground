@@ -1,7 +1,5 @@
-const fs = require("fs");
-let file = "./movies.json";
-const moviefile = fs.readFileSync(file);
-let movies = JSON.parse(moviefile);
+import { string } from "joi";
+import movies from "../../movies.json"
 
 export function filterByGenre(genre: any) {
     const genreMovies = movies.filter((movie: { Genre: string | any[]; }) => movie.Genre.includes(genre))
@@ -13,34 +11,50 @@ export function filterByActor(actor: any) {
     return actorMovies;
   }
 
-export const filterMovies = (req: { query: { genre: any; actor: any; imdbSort: any; }; }, res: { send: (arg0: string) => void; json: (arg0: any) => void; }) => {
-    const { genre, actor, imdbSort } = req.query;
-    let allMovies = movies.getAllMovies();
+// export const filterMovies = (req: { query: { genre: any; actor: any; imdbSort: any; }; }, res: { send: (arg0: string) => void; json: (arg0: any) => void; }) => {
+//     const { genre, actor, imdbSort } = req.query;
+//     let allMovies = movies.getAllMovies();
   
-    if (genre) allMovies = movies.filterByGenre(`${genre}`);
-    else if (actor) allMovies = movies.filterByActor(`${actor}`);
-    else if (imdbSort) {
-      if (imdbSort === "DESC" || "desc")
-        allMovies = movies.sortByRating(true, allMovies);
-      if (imdbSort === "ASC" || "asc")
-        allMovies = movies.sortByRating(false, allMovies);
-    } else res.send("Invalid filter!");
+//     if (genre) allMovies = movies.filterByGenre(`${genre}`);
+//     else if (actor) allMovies = movies.filterByActor(`${actor}`);
+//     else if (imdbSort) {
+//       if (imdbSort === "DESC" || "desc")
+//         allMovies = movies.sortByRating(true, allMovies);
+//       if (imdbSort === "ASC" || "asc")
+//         allMovies = movies.sortByRating(false, allMovies);
+//     } else res.send("Invalid filter!");
   
-    res.json(allMovies);
-  };
+//     res.json(allMovies);
+//   };
 
-export const totalLength = (_req: any, res: { json: (arg0: string) => void; }) => {
-    res.json(`${movies.totalLengthOfAllMovies()}`);
-  };
+export function totalLengthOfAllMovies() {
+  const result = movies.reduce((sum, movie) => {
+    const length = parseInt(movie.Runtime);
+    return length ? length + sum : sum;
+  }, 0);
+  let num = result;
+  let hours = num / 60;
+  let rhours = Math.floor(hours);
+  let minutes = (hours - rhours) * 60;
+  let rminutes = Math.round(minutes);
+  return `${rhours} hours and ${rminutes} minutes.`;
+}
   
-export const movieLanguages = (_req: any, res: { json: (arg0: any) => void; }) => {
-    res.json(movies.allLanguagues());
-  };
+  export function imdbUrls() {
+    const imdburls = movies.map((movie) => {
+      return `https://www.imdb.com/title/${movie.imdbID}/`;
+    });
+    return imdburls;
+  }
   
-export const movieUrls = (_req: any, res: { json: (arg0: any) => void; }) => {
-    res.json(movies.imdbUrls());
-  };
+  export function totalImdbVotes() {
+    const result = movies.reduce((sum, movie) => {
+      const votes = parseInt(movie.imdbVotes.replace(/,/g, ""));
+      return votes ? votes + sum : sum;
+    }, 0);
   
-export const movieVotes = (_req: any, res: { json: (arg0: any) => void; }) => {
-    res.json(movies.totalImdbVotes());
-  };
+    return result;
+  }
+
+
+

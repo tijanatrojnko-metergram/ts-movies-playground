@@ -42,7 +42,7 @@ export const getSpecificMovie = async (movieId: string) => {
   try {
     const foundMovie = await Movie.findOne({ where: { id: movieId } });
     if (!foundMovie) {   // get specific movie
-      return { error: "Movie is not found!" }
+      return { error: "Movie is not found!" };
     }
     return foundMovie;
   }

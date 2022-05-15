@@ -50,7 +50,7 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/create": {
+		"/createMovie": {
 			"post": {
 				"operationId": "CreateMovie",
 				"responses": {
@@ -80,9 +80,9 @@
 				}
 			}
 		},
-		"/read": {
+		"/movies": {
 			"get": {
-				"operationId": "GetMovie",
+				"operationId": "GetAllMovies",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -100,7 +100,7 @@
 				"parameters": []
 			}
 		},
-		"/read/{movieId}": {
+		"/movies/{movieId}": {
 			"get": {
 				"operationId": "ReadMovieWithId",
 				"responses": {
@@ -129,7 +129,7 @@
 				]
 			}
 		},
-		"/update": {
+		"/updateMovie": {
 			"put": {
 				"operationId": "UpdateMovie",
 				"responses": {
@@ -174,7 +174,7 @@
 				}
 			}
 		},
-		"/delete/{movieId}": {
+		"/deleteMovie/{movieId}": {
 			"delete": {
 				"operationId": "DeleteMovie",
 				"responses": {
@@ -203,9 +203,9 @@
 				]
 			}
 		},
-		"/api/user-permission/get-all": {
+		"/genre/{genre}": {
 			"get": {
-				"operationId": "GetAllUser",
+				"operationId": "FilterByGenre",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -217,132 +217,13 @@
 					}
 				},
 				"tags": [
-					"User Permission"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/api/user-permission/create": {
-			"post": {
-				"operationId": "CreateUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User Permission"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"properties": {
-									"roles": {
-										"items": {
-											"type": "string"
-										},
-										"type": "array"
-									},
-									"email": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"roles",
-									"email"
-								],
-								"type": "object"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/user-permission/update/{id}": {
-			"put": {
-				"operationId": "UpdateUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User Permission"
+					"Movie"
 				],
 				"security": [],
 				"parameters": [
 					{
-						"in": "query",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"properties": {
-									"roles": {
-										"items": {
-											"type": "string"
-										},
-										"type": "array"
-									},
-									"email": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"roles",
-									"email"
-								],
-								"type": "object"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/user-permission/delete/{id}": {
-			"delete": {
-				"operationId": "DeleteUser",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User Permission"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "id",
+						"in": "path",
+						"name": "genre",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -351,43 +232,9 @@
 				]
 			}
 		},
-		"/api/server-status": {
+		"/actors/{actor}": {
 			"get": {
-				"operationId": "GetServerStatus",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"serverTime": {
-											"type": "string"
-										},
-										"status": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"serverTime",
-										"status"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Server Status"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/api/server-status/routes": {
-			"get": {
-				"operationId": "GetServerRoutes",
+				"operationId": "FilterByActor",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -399,7 +246,50 @@
 					}
 				},
 				"tags": [
-					"Server Status"
+					"Movie"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "actor",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/moviesdata": {
+			"get": {
+				"operationId": "MoviesData",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"votes": {},
+										"urls": {},
+										"length": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"votes",
+										"urls",
+										"length"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Movie"
 				],
 				"security": [],
 				"parameters": []

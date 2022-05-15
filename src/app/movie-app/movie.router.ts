@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Tags } from 'tsoa';
-import { filterByGenre,filterByActor,filterMovies,totalLength,movieLanguages,movieUrls,movieVotes } from './movie-manipulation';
+import { filterByGenre,filterByActor,totalLengthOfAllMovies, imdbUrls, totalImdbVotes } from './movie-manipulation';
 import { IMovie, createMovie, updateMovie, deleteMovie, getAllMovies, getSpecificMovie} from './movie.service';
 
 @Tags('Movie')
@@ -7,39 +7,47 @@ import { IMovie, createMovie, updateMovie, deleteMovie, getAllMovies, getSpecifi
 
 export class MovieController extends Controller {
    
-  @Post('/create')
+  @Post('/createMovie')
   public async createMovie(@Body() movie: IMovie) {
     return createMovie(movie) 
   }
 
-  @Get('/read')
+  @Get('/movies')
   public async getAllMovies() {
     return getAllMovies()
   }
 
-  @Get('/read/{movieId}')
+  @Get('/movies/{movieId}')
   public async readMovieWithId(@Path('movieId') movieId: string) {
     return getSpecificMovie(movieId)
   }
 
-  @Put('/update')
+  @Put('/updateMovie')
   public async updateMovie(@Body() movie: { id: string } & IMovie) {
     return updateMovie(movie)
   }
 
-  @Delete('/delete/{movieId}')
+  @Delete('/deleteMovie/{movieId}')
   public async deleteMovie(@Path('movieId') movieId: string) {
     return deleteMovie(movieId)
   }
 
-  @Get('/read/{genre}')
-  public async filterByGenre() {
-    return filterByGenre(`{genre}`)
+  @Get('/genre/{genre}')
+  public async filterByGenre(@Path('genre') genre: string) {
+    return filterByGenre(genre)
   }
 
-  @Get('/read/{actor}')
-  public async filterByActor() {
-    return filterByActor(`{actor}`)
+  @Get('/actors/{actor}')
+  public async filterByActor(@Path('actor') actor: string) {
+    return filterByActor(actor)
+  }
+
+  @Get('/moviesdata')
+  public async moviesData() {
+    return {
+      length:totalLengthOfAllMovies(),
+      urls:imdbUrls(),
+      votes:totalImdbVotes()}
   }
 
 }
